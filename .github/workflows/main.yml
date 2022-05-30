@@ -2,7 +2,7 @@ name: workflow to push docker images to ecr
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   workflow_dispatch:
 
 jobs:

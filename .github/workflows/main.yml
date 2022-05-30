@@ -1,0 +1,37 @@
+name: workflow to push docker images to ecr
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  Images2ECR:
+    runs-on: self-hosted
+
+    steps: 
+
+      - name: checkout code
+        uses: action/checkout@v3
+
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-key-id: ${{secrets.AWS_SECRET_KEY_ID}}
+          aws-region: us-east-1
+      - name: ecr login
+        id: login-ecr
+        uses: aws-actions/aws-actions/amazon-ecr-login@v3
+
+      - name: build and push docker images to ecr
+        env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: myrepo
+        IMAGE_TAG: myrepo_image
+
+        run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+

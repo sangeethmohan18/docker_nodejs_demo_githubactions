@@ -12,17 +12,17 @@ jobs:
     steps: 
 
       - name: checkout code
-        uses: action/checkout@v3
+        uses: action/checkout@v2
 
       - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v3
+        uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
           aws-secret-key-id: ${{secrets.AWS_SECRET_KEY_ID}}
           aws-region: us-east-1
       - name: ecr login
         id: login-ecr
-        uses: aws-actions/aws-actions/amazon-ecr-login@v3
+        uses: aws-actions/aws-actions/amazon-ecr-login@v1
 
       - name: build and push docker images to ecr
         env:
